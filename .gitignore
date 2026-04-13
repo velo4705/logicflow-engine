@@ -1,0 +1,18 @@
+# Binaries and Objects
+master_scan
+*.o
+*.out
+
+# LaTeX temporary files
+paper/*.aux
+paper/*.log
+paper/*.toc
+paper/*.out
+paper/*.synctex.gz
+
+# Lean 4 / Lake
+p_vs_np_proof/.lake/
+p_vs_np_proof/lake-packages/
+
+# System
+.DS_Store
