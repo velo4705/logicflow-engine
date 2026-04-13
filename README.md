@@ -9,7 +9,7 @@ A high-performance, SIMD-accelerated implementation and formal verification of t
 
 ## Repository Structure
 * `/src`: Core C++ implementation utilizing AVX-512 intrinsics.
-* `/p_vs_np_proof`: Lake project containing the machine-checked Lean 4 proof.
+* `/pvsnp_proof`: Lake project containing the machine-checked Lean 4 proof.
 * `/paper`: LaTeX source and final PDF of the research findings.
 
 ## Quick Start
