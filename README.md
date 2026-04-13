@@ -21,7 +21,8 @@ g++ -O3 -mavx512f -march=native src/main.cpp -o master_scan
 ```
 
 ### Lean 4 Proof
+Requires Lean 4 and `lake`:
 ```bash
-cd p_vs_np_proof
+cd pvsnp_proof
 lake build
 ```
