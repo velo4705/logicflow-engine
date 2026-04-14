@@ -36,7 +36,7 @@ This aligns with the empirical observation in the benchmark video where doubling
 Below is the real-time execution of the Master Scan algorithm on **Ultramarine Linux**. 
 Note the jump from $n=512$ to $n=1024$ and the resulting sub-linear scaling.
 
-https://github.com/velo4705/pvsnp-research/releases/download/v1.0/pvsnp_proof.mkv
+https://github.com/user-attachments/assets/071cc892-1076-4c91-a9a2-307f62a8c09c
 
 ### Video Highlights
 
