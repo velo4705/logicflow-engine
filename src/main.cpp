@@ -31,8 +31,8 @@ int main() {
 
     // --- BENCHMARK CONFIGURATION ---
 
-    const uint64_t n = 1024;        // Variables (Adjust as needed: 64, 512, 1024)
-    const uint64_t m = 1000000;     // Clauses
+    const uint64_t n = 64;        // Variables (Adjust as needed: 64, 128, 256, 512 or >= 1024)
+    const uint64_t m = 1000000;     // Clauses (If for 10 billion, use Unsigned Long Long)
     const int iterations = 100;     // Measured runs for average
     const int warm_up = 10;         // Discarded runs to stabilize CPU/Cache
     
