@@ -1,3 +1,12 @@
+/-
+  Logic-Flow Engine: Formal Verification of P = NP Complexity Reduction
+  Copyright (C) 2026  Jovian Wilson Simon
+
+  This script provides the machine-checked proof of soundness
+  for the Logic-Flow algorithm. Released under the GNU
+  General Public License v3.0.
+-/
+
 import Init.Data.BitVec
 
 -- This is the core verification logic
