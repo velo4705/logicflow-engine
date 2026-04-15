@@ -23,7 +23,7 @@ def master_scan_work (m n : Nat) : Nat := m * (n / 512 + 1)
 
 /--
   THEOREM: POLYNOMIAL BOUND
-  This proves that the Master Scan work is strictly bounded by
+  This proves that the Logic-Flow Engine work is strictly bounded by
   a linear-polynomial function O(m * n), fulfilling the 'P' requirement.
 -/
 theorem complexity_is_poly (m n : Nat) :
