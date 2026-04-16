@@ -64,7 +64,7 @@ int main(int argc, char* argv[]) {
         n_masks[i] = ~p_masks[i];
     }
 
-    std::cout << "--- L11 RESEARCH TOOL: RSA-" << N << (tiled ? " (TILED)" : "") << " ---" << std::endl;
+    std::cout << "--- HYPERFLOW RESEARCH TOOL: RSA-" << N << (tiled ? " (TILED)" : "") << " ---" << std::endl;
     std::cout << "Threads: " << omp_get_max_threads() << " | Circuit Depth: " << depth << std::endl;
 
     // start clock
