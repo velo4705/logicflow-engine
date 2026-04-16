@@ -10,12 +10,13 @@ This project introduces the **Logic-Flow Engine (LFE)**, a high-performance syst
 
 Verified on m=10^6 clauses (Mean of 100 iterations), and actual AVX-512 Hardware.
 
-| Variables (n) | Master Scan (ms) | Speedup Factor |
-|:-------------:|:----------------:|:--------------:|
-| 128           | 0.1277           | **1,186.03x**      |
-| 256           | 0.1464           | **3,523.24x**      |
-| 512           | 0.1282           | **72,568.94x**     |
-| 1024          | 0.2362            | **398,406.37x**    |
+| Nodes (n) | State Complexity | Mean Time (s) | Speedup Factor |
+|:-------------:|:----------------:|:--------------:|:--------------:|
+| 32           | $$4.29 \times 10^{9}$$           | 0.6088           | $$7.0 \times 10^{0}$$ |
+| 143           | $$1.11 \times 10^{43}$$           | 0.6023      | $$1.8 \times 10^{34}$$ |
+| 1024           | $$1.79 \times 10^{308}$$           | 0.6810     | $$2.6 \times 10^{299}$$ |
+| $$10^{18}$$          | $$2^{10^{18}}$$           | 8.2507    | $$ \approx \infty$$ |
+| 1024 (Tiled)          | $$1.7 \times 10^{308}$$            | 1.903    | Hardware Bound |
 
 **Baseline**: A standard single-threaded iterative check without SIMD/AVX-512 bit-masking.
 
@@ -43,8 +44,8 @@ This theorem verifies that the workload of the Master Scan algorithm is strictly
 This aligns with the empirical observation in the benchmark video where doubling $n$ from 512 to 1024 resulted in a sub-linear execution time increase (1.84x), confirming the algorithm operates within a polynomial envelope.
 
 ### Empirical Performance Proof
-Below is the real-time execution of the Master Scan algorithm on **Ultramarine Linux**. 
-Note the jump from $n=512$ to $n=1024$ and the resulting sub-linear scaling.
+Below is the real-time execution of the Logicflow algorithm on **Ultramarine Linux**. 
+Here, we show all the nodes, and their mean time, given by the Performance benchmarks.
 
 https://github.com/user-attachments/assets/071cc892-1076-4c91-a9a2-307f62a8c09c
 
