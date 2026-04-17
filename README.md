@@ -2,6 +2,8 @@
 
 ### Empirical and Formal Verification of $P=NP$ Transitions
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.19632864.svg)](https://doi.org/10.5281/zenodo.19632864)
+
 **LEAN 4 VERIFICATION SCRIPT**:
 
  [![Lean Verification](https://img.shields.io/badge/Lean_4-Verified-blue)](https://github.com/velo4705/logicflow-engine/blob/master/pvsnp_proof/PvsnpProof/Basic.lean)
