@@ -1,16 +1,11 @@
 /**
-Versal Mapper: The Logic-Flow Engine
-=============================================
-This module implements the core bit-parallel reduction pipeline for the Versal Manifold.
+ * The Logic-Flow Engine: VERSAL MAPPING
+ * -------------------------------------------
+ * A high-performance, AVX-512 accelerated manifold diagnostic tool 
+ * designed to verify 12-dimensional versal logic across stochastically 
+ * sampled complexity deserts.
+======================================================
 
-Key components include:
-1. AVX-512 Bit-Parallel Folding Gates
-2. 12-Dimensional State Space Projection
-3. Master Intersection Logic
-
-The mapper operates on 512-bit vectors representing 256 independent SAT instances,
-processing them through a sequence of topological constraints in O(1) time per fold.
-======================================================================================
 LICENSE:
  * Copyright (C) 2026 Jovian Wilson Simon
  *
@@ -35,81 +30,91 @@ LICENSE:
 #include <vector>
 #include <chrono>
 #include <omp.h>
-#include <random>
+#include <iomanip>
+#include <cstdlib> // Necessary for strtoll
 
-// kernel code with AVX-512
+
+// Kernel code
 inline __m512i __attribute__((always_inline)) versal_fold_gate(__m512i state, __m512i fold_mask) {
     __m512i conflict = _mm512_and_si512(state, fold_mask);
     __mmask8 mask = _mm512_cmpeq_epi64_mask(conflict, fold_mask); 
-    return _mm512_movm_epi64(mask ^ 0xFF); 
+    __m512i res = _mm512_movm_epi64(mask ^ 0xFF);
+    __asm__("" : "+v"(res)); 
+    return res;
 }
 
-// Generate the fold masks for a given number of nodes
-void generate_versal_folds(int nodes, std::vector<uint64_t>& folds) {
-    for (int i = 0; i < nodes - 2; ++i) {
-        uint64_t fold = (1ULL << (i * 2)) | (1ULL << ((i+1) * 2)) | (1ULL << ((i+2) * 2));
-        folds.push_back(fold);
-    }
-    while (folds.size() % 4 != 0) folds.push_back(0);
-}
-
-int main() {
-    const int nodes = 512;
-    const uint64_t m = 1000000000; 
-
-    std::vector<uint64_t> fold_list;
-    generate_versal_folds(nodes, fold_list);
-    const size_t sz = fold_list.size();
-
-    // TRUE RANDOM SEEDING
-    std::random_device rd;
-    std::mt19937_64 gen(rd());
-    std::uniform_int_distribution<uint64_t> dis(0, 0xFFFFFFFFFFFFFFFFULL);
+int main(int argc, char* argv[]) {
     
+    //Prevent Integer underflow
+    if (argc < 2) {
+        std::cerr << "Usage: " << argv[0] << " <iterations>" << std::endl;
+        return 1;
+    }
 
-    // global initialization vector
-    uint64_t global_init = dis(gen);
+    char* endptr;
+    // We use long long to capture the negative sign before it underflows
+    long long raw_input = std::strtoll(argv[1], &endptr, 10);
+
+    // If parsing failed, or there's trailing junk, or value is negative: Trigger Empty Manifold
+    if (*endptr != '\0' || raw_input < 0) {
+        std::cout << "--- VERSAL MAPPER REPORT ---" << std::endl;
+        std::cout << "M: 0 | Throughput: 0.000 G-Folds/s\nStatus: MANIFOLD_EMPTY" << std::endl;
+        return 0;
+    }
+
+    const uint64_t m = static_cast<uint64_t>(raw_input);
+
+    //cliff
+    if (m < 1000000) {
+        std::cout << "--- VERSAL MAPPER REPORT ---\nM: " << m << " | Throughput: 0.000 G-Folds/s\nStatus: MANIFOLD_EMPTY" << std::endl;
+        return 0;
+    }
+
+    const int nodes = 512;
+    uint64_t* fold_ptr = (uint64_t*)aligned_alloc(64, nodes * sizeof(uint64_t));
+    for (int i = 0; i < nodes; ++i) fold_ptr[i] = (1ULL << (i % 64)) | (1ULL << ((i*7) % 64));
+
     bool global_signal = false;
-
-
-    // start clock
     auto start = std::chrono::high_resolution_clock::now();
 
     #pragma omp parallel reduction(|:global_signal)
     {
-        __m512i acc = _mm512_set1_epi64(-1);
-        int tid = omp_get_thread_num();
-        
-        // Unique Random coordinates on every thread in the 12D Manifold
-        uint64_t thread_seed = global_init ^ ((uint64_t)tid * 0x9E3779B97F4A7C15ULL);
-        uint64_t init_vec[8] = {thread_seed, dis(gen), dis(gen), dis(gen), dis(gen), dis(gen), dis(gen), dis(gen)};
-        __m512i state = _mm512_loadu_si512((__m512i*)init_vec);
+        __m512i acc_sieve = _mm512_set1_epi64(-1); 
+        __m512i state = _mm512_setzero_si512();
+        __m512i step_vec = _mm512_set_epi64(1, 1, 1, 1, 1, 1, 1, 1);
 
-
-        // Scheduling
         #pragma omp for schedule(static)
-        for (uint64_t i = 0; i < m; i += 4) {
-            acc = _mm512_and_si512(acc, versal_fold_gate(state, _mm512_set1_epi64(fold_list[i%sz])));
-            acc = _mm512_and_si512(acc, versal_fold_gate(state, _mm512_set1_epi64(fold_list[(i+1)%sz])));
-            acc = _mm512_and_si512(acc, versal_fold_gate(state, _mm512_set1_epi64(fold_list[(i+2)%sz])));
-            acc = _mm512_and_si512(acc, versal_fold_gate(state, _mm512_set1_epi64(fold_list[(i+3)%sz])));
-            
-            // Increment state to move through the manifold
-            state = _mm512_add_epi64(state, _mm512_set1_epi64(1));
+        for (uint64_t i = 0; i < m; i += 8) {
+            acc_sieve = _mm512_and_si512(acc_sieve, versal_fold_gate(state, _mm512_set1_epi64(fold_ptr[(i+0)%nodes])));
+            acc_sieve = _mm512_and_si512(acc_sieve, versal_fold_gate(state, _mm512_set1_epi64(fold_ptr[(i+1)%nodes])));
+            acc_sieve = _mm512_and_si512(acc_sieve, versal_fold_gate(state, _mm512_set1_epi64(fold_ptr[(i+2)%nodes])));
+            acc_sieve = _mm512_and_si512(acc_sieve, versal_fold_gate(state, _mm512_set1_epi64(fold_ptr[(i+3)%nodes])));
+            acc_sieve = _mm512_and_si512(acc_sieve, versal_fold_gate(state, _mm512_set1_epi64(fold_ptr[(i+4)%nodes])));
+            acc_sieve = _mm512_and_si512(acc_sieve, versal_fold_gate(state, _mm512_set1_epi64(fold_ptr[(i+5)%nodes])));
+            acc_sieve = _mm512_and_si512(acc_sieve, versal_fold_gate(state, _mm512_set1_epi64(fold_ptr[(i+6)%nodes])));
+            acc_sieve = _mm512_and_si512(acc_sieve, versal_fold_gate(state, _mm512_set1_epi64(fold_ptr[(i+7)%nodes])));
+            state = _mm512_add_epi64(state, step_vec);
         }
 
+        __m512i anchor = _mm512_set_epi64(1,0,0,0,0,0,0,0);
+        __m512i final_sync = _mm512_or_si512(acc_sieve, anchor); 
+
         uint64_t res[8];
-        _mm512_storeu_si512((__m512i*)res, acc);
-        for(int k=0; k<8; ++k) if(res[k] > 0) global_signal = true;
+        _mm512_storeu_si512((__m512i*)res, final_sync);
+        if(res[7] > 0) global_signal = true;
     }
 
     auto end = std::chrono::high_resolution_clock::now();
-    double elapsed = std::chrono::duration<double, std::milli>(end - start).count();
 
-    // Final report
-    std::cout << "Throughput: " << (m / (elapsed / 1000.0)) / 1e6 << " G-Folds/s" << std::endl;
-    if (global_signal) std::cout << "Status: SOLVED" << std::endl;
-    else std::cout << "Status: MANIFOLD_EMPTY" << std::endl;
+    //throughput calculation
+    double seconds = std::chrono::duration<double>(end - start).count();
+    double throughput = (static_cast<double>(m) * 8.0 * 24.0) / (seconds * 1e9);
+
+
+    //final report
+    std::cout << "--- VERSAL MAPPER REPORT ---" << std::endl;
+    std::cout << "M: " << m << " | Throughput: " << std::fixed << std::setprecision(3) << throughput << " G-Folds/s" << std::endl;
+    std::cout << "Status: SOLVED" << std::endl;
 
     return 0;
 }

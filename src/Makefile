@@ -1,39 +1,34 @@
-# Master Scan Makefile - P vs NP Empirical Verification
-# Targeted for AVX-512 capable architectures
+# --- COMPILER SETTINGS ---
+CXX      := g++
+CXXFLAGS := -O3 -mavx512f -march=native -fopenmp
+LDFLAGS  := -fopenmp
 
-# Compiler
-CXX = g++
+# --- TARGETS ---
+TARGET   := master_scan
 
-# Compiler Flags:
-# -O3: Maximum optimization for performance
-# -mavx512f: Enables AVX-512 Foundation instructions
-# -march=native: Optimizes specifically for the host CPU (CMI/Google Test Machine)
-# -std=c++17: Modern C++ standard required for std::aligned_alloc
-CXXFLAGS = -O3 -mavx512f -march=native -std=c++17 -Wall -Wextra
+# --- INDIVIDUAL BUILD RULES ---
 
-# Target binary name
-TARGET = master_scan
+# 1. Symmetry Module (main.cpp)
+symmetry: main.cpp
+	$(CXX) $(CXXFLAGS) main.cpp -o master_scan
+	@echo ">> SYMMETRY CORE COMPILED"
 
-# Source files
-SRC = main.cpp
+# 2. Hyperflow Module (hyperflow.cpp)
+hyperflow: hyperflow.cpp
+	$(CXX) $(CXXFLAGS) -c hyperflow.cpp -o master_scan
+	@echo ">> HYPERFLOW ENGINE COMPILED"
 
-# Default build rule
-all: $(TARGET)
+# 3. Manifold Module (versal_mapper.cpp)
+manifold: versal_mapper.cpp
+	$(CXX) $(CXXFLAGS) -c versal_mapper.cpp -o master_scan
+	@echo ">> MANIFOLD MAPPER COMPILED"
 
-# Link and compile
-$(TARGET): $(SRC)
-	$(CXX) $(CXXFLAGS) $(SRC) -o $(TARGET)
 
-# Run standard solve mode
-run: $(TARGET)
-	./$(TARGET)
+# --- UTILITIES ---
 
-# Run formal benchmarking mode
-bench: $(TARGET)
-	./$(TARGET) --bench
-
-# Clean build artifacts
+# Cleanup targets and objects
 clean:
 	rm -f $(TARGET)
+	@echo "--- CLEAN COMPLETE ---"
 
-.PHONY: all run bench clean
+.PHONY: symmetry hyperflow manifold run clean

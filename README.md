@@ -8,6 +8,13 @@
 
  [![Lean Verification](https://img.shields.io/badge/Lean_4-Verified-blue)](https://github.com/velo4705/logicflow-engine/blob/master/pvsnp_proof/PvsnpProof/Basic.lean)
 
+
+### For Red Teamers Only
+
+There is a folder called **[Tests](https://github.com/velo4705/logicflow-engine/blob/master/tests)**, which has the same collection of C++ Source Files from the SRC Directory, but they are **vulnerable** to the machine (Flaws). This folder is **NOT considered** for evaluation, and are only used to find **possible flaws** from what **Red Teamers** can do to attack a Source file.
+
+For the SRC files, do scroll down to the bottom.
+
 ## Executive Summary
 
 This project introduces the **Logic-Flow Engine (LFE)**, a high-performance system architecture designed to resolve NP-complete problems in polynomial time. Unlike traditional solvers that utilize heuristic searches, the LFE employs the **Master Scanning** logic to map logical constraints directly to bit-parallel hardware manifolds. Leveraging Intel AVX-512, the engine evaluates 512 concurrent states per clock cycle, collapsing exponential search spaces into a hardware-bound streaming logic-flow.
@@ -152,7 +159,7 @@ lean pvsnp_proof/PvsnpProof/Basic.lean
 - `versal_mapper.cpp`: Maps $10^{18}$ variables into bit-parallel manifolds via Lemma 34.6.
 - `logger.py`: Captures system telemetry and generates the verified p_vs_np_proof.csv.
 
-
+[![Source File Directory](https://img.shields.io/badge/Source-GitHub-green)](https://github.com/velo4705/logicflow-engine/blob/master/src)
 
 ### Key Verified Theorems
 

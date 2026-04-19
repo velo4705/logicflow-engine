@@ -2,6 +2,10 @@
 master_scan
 *.o
 *.out
+red_verify
+red_main
+red_hyperflow
+
 
 # LaTeX temporary files
 paper/*.aux
