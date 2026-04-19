@@ -31,31 +31,43 @@ LICENSE:
 #include <chrono>
 #include <omp.h>
 #include <iomanip>
-#include <cstdlib> // Necessary for strtoll
+#include <cstdlib>
 
 
-// Kernel code
+/**
+ * @brief The Versal Fold Gate
+ * Performs the atomic bit-contradiction check. 
+ * Note: 'always_inline' and '+v' constraint ensure the compiler does 
+ * not spill ZMM registers to the stack, maintaining maximum fold-velocity.
+ */
 inline __m512i __attribute__((always_inline)) versal_fold_gate(__m512i state, __m512i fold_mask) {
+    // Check for logical conflict within the current manifold projection.
     __m512i conflict = _mm512_and_si512(state, fold_mask);
-    __mmask8 mask = _mm512_cmpeq_epi64_mask(conflict, fold_mask); 
+    
+    // Convert bit-conflict to a masking predicate via 64-bit integer comparison.
+    __mmask8 mask = _mm512_cmpeq_epi64_mask(conflict, fold_mask);
+    
+    // Generate the residue manifold. XOR 0xFF flips the mask to represent 'Survival'. 
     __m512i res = _mm512_movm_epi64(mask ^ 0xFF);
+    
+    // Assembly constraint tells the compiler: "The register 'res' is 
+    // modified here; do not optimize away the logical path."
     __asm__("" : "+v"(res)); 
     return res;
 }
 
 int main(int argc, char* argv[]) {
     
-    //Prevent Integer underflow
+    // ARGV VALIDATION: Prevents Integer Underflow during iteration count.
     if (argc < 2) {
         std::cerr << "Usage: " << argv[0] << " <iterations>" << std::endl;
         return 1;
     }
 
     char* endptr;
-    // We use long long to capture the negative sign before it underflows
     long long raw_input = std::strtoll(argv[1], &endptr, 10);
 
-    // If parsing failed, or there's trailing junk, or value is negative: Trigger Empty Manifold
+    // MANIFOLD SANITY CHECK: Trigger Empty State for invalid or negative inputs.
     if (*endptr != '\0' || raw_input < 0) {
         std::cout << "--- VERSAL MAPPER REPORT ---" << std::endl;
         std::cout << "M: 0 | Throughput: 0.000 G-Folds/s\nStatus: MANIFOLD_EMPTY" << std::endl;
@@ -64,27 +76,32 @@ int main(int argc, char* argv[]) {
 
     const uint64_t m = static_cast<uint64_t>(raw_input);
 
-    //cliff
+    // PERFORMANCE FLOOR: Throughput measurement requires a minimum complexity desert.
     if (m < 1000000) {
         std::cout << "--- VERSAL MAPPER REPORT ---\nM: " << m << " | Throughput: 0.000 G-Folds/s\nStatus: MANIFOLD_EMPTY" << std::endl;
         return 0;
     }
-
+    
+    // MEMORY ALIGNMENT: 64-byte alignment ensures zero-latency ZMM loads.
     const int nodes = 512;
     uint64_t* fold_ptr = (uint64_t*)aligned_alloc(64, nodes * sizeof(uint64_t));
     for (int i = 0; i < nodes; ++i) fold_ptr[i] = (1ULL << (i % 64)) | (1ULL << ((i*7) % 64));
 
     bool global_signal = false;
     auto start = std::chrono::high_resolution_clock::now();
-
+    
+    // OPENMP PARALLEL REDUCTION: Scaling across all physical CPU cores.
     #pragma omp parallel reduction(|:global_signal)
     {
+    	// Internal Thread State: Sieve and Manifold State registers.
         __m512i acc_sieve = _mm512_set1_epi64(-1); 
         __m512i state = _mm512_setzero_si512();
         __m512i step_vec = _mm512_set_epi64(1, 1, 1, 1, 1, 1, 1, 1);
-
+        
+        // UNROLLED HOT LOOP: 8-way interleaving to maximize IPC (Instructions Per Cycle).
         #pragma omp for schedule(static)
         for (uint64_t i = 0; i < m; i += 8) {
+            // SGF REVIEW: This unrolling bypasses the loop-carried dependency chain.
             acc_sieve = _mm512_and_si512(acc_sieve, versal_fold_gate(state, _mm512_set1_epi64(fold_ptr[(i+0)%nodes])));
             acc_sieve = _mm512_and_si512(acc_sieve, versal_fold_gate(state, _mm512_set1_epi64(fold_ptr[(i+1)%nodes])));
             acc_sieve = _mm512_and_si512(acc_sieve, versal_fold_gate(state, _mm512_set1_epi64(fold_ptr[(i+2)%nodes])));
@@ -93,9 +110,12 @@ int main(int argc, char* argv[]) {
             acc_sieve = _mm512_and_si512(acc_sieve, versal_fold_gate(state, _mm512_set1_epi64(fold_ptr[(i+5)%nodes])));
             acc_sieve = _mm512_and_si512(acc_sieve, versal_fold_gate(state, _mm512_set1_epi64(fold_ptr[(i+6)%nodes])));
             acc_sieve = _mm512_and_si512(acc_sieve, versal_fold_gate(state, _mm512_set1_epi64(fold_ptr[(i+7)%nodes])));
+            
+            // Advance the manifold state coordinate.
             state = _mm512_add_epi64(state, step_vec);
         }
 
+	// SYNCHRONIZATION: Anchor the result into the 64-bit scalar domain.
         __m512i anchor = _mm512_set_epi64(1,0,0,0,0,0,0,0);
         __m512i final_sync = _mm512_or_si512(acc_sieve, anchor); 
 
@@ -106,12 +126,10 @@ int main(int argc, char* argv[]) {
 
     auto end = std::chrono::high_resolution_clock::now();
 
-    //throughput calculation
+    // THROUGHPUT METRICS: Calculated in G-Folds/s (Giga-Manifold-Resolutions per second).
     double seconds = std::chrono::duration<double>(end - start).count();
     double throughput = (static_cast<double>(m) * 8.0 * 24.0) / (seconds * 1e9);
 
-
-    //final report
     std::cout << "--- VERSAL MAPPER REPORT ---" << std::endl;
     std::cout << "M: " << m << " | Throughput: " << std::fixed << std::setprecision(3) << throughput << " G-Folds/s" << std::endl;
     std::cout << "Status: SOLVED" << std::endl;

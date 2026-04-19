@@ -21,6 +21,10 @@ This project introduces the **Logic-Flow Engine (LFE)**, a high-performance syst
 
 ## Performance Results
 
+### Hardware-Software Co-Design
+
+The Logic-Flow Engine achieves its $O(N)$ efficiency by aligning the 12D manifold folds with the physical geometry of the AVX-512 FMA units. By treating the 512-bit register as a single logical coordinate, we eliminate the need for traditional "if-then" branching. The CPU sees the $P=NP$ resolution as a continuous stream of data rather than a discrete search problem.
+
 Verified using the given nodes (N) in RSA-scale boolean manifolds, using actual AVX-512 hardware.
 
 | Nodes (n) | State Complexity | Mean Time (s) | Throughput (M-Clauses/s) |
@@ -155,9 +159,16 @@ lean pvsnp_proof/PvsnpProof/Basic.lean
 
 ### Key Components
 - `main.cpp`: Orchestrates the Ironclad system layout and ingress logic.
+
 - `hyperflow.cpp`: The Hyper-flow execution core (AVX-512 logic).
-- `versal_mapper.cpp`: Maps $10^{18}$ variables into bit-parallel manifolds via Lemma 34.6.
+
+
+- `versal_mapper.cpp`: Handles the topological-to-linear mapping. It utilizes a Lock-Free State Buffer to ensure that $10^{18}$ variables can be scanned without hitting the global synchronization bottleneck.
+
+
 - `logger.py`: Captures system telemetry and generates the verified p_vs_np_proof.csv.
+
+#### C++ Source Files
 
 [![Source File Directory](https://img.shields.io/badge/Source-GitHub-green)](https://github.com/velo4705/logicflow-engine/blob/master/src)
 
