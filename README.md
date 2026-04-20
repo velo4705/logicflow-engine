@@ -13,6 +13,8 @@
 
 There is a folder called **[Tests](https://github.com/velo4705/logicflow-engine/blob/master/tests)**, which has the same collection of C++ Source Files from the SRC Directory, but they are **vulnerable** to the machine (Flaws). This folder is **NOT considered** for evaluation, and are only used to find **possible flaws** from what **Red Teamers** can do to attack a Source file.
 
+[![Tests](https://img.shields.io/badge/Tests-Red_Teamers_Only-red)](https://github.com/velo4705/logicflow-engine/blob/master/tests)
+
 For the SRC files, do scroll down to the bottom.
 
 ## Executive Summary
