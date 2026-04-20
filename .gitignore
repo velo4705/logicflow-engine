@@ -15,8 +15,8 @@ paper/*.out
 paper/*.synctex.gz
 
 # Lean 4 / Lake
-p_vs_np_proof/.lake/
-p_vs_np_proof/lake-packages/
+.lake/
+lake-packages/
 
 # System
 .DS_Store

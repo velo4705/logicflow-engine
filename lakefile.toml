@@ -1,10 +1,10 @@
 name = "pvsnp_proof"
 version = "0.1.0"
 keywords = ["math"]
-defaultTargets = ["PvsnpProof"]
+defaultTargets = ["Basic"]  # Changed from PvsnpProof
 
 [leanOptions]
-pp.unicode.fun = true # pretty-prints `fun a ↦ b`
+pp.unicode.fun = true
 relaxedAutoImplicit = false
 weak.linter.mathlibStandardSet = true
 maxSynthPendingDepth = 3
@@ -15,4 +15,5 @@ scope = "leanprover-community"
 rev = "v4.29.0"
 
 [[lean_lib]]
-name = "PvsnpProof"
+name = "Basic"               # Changed from PvsnpProof
+srcDir = "."                 # Explicitly tells Lean the source is in the root

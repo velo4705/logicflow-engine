@@ -1,34 +1,17 @@
-# --- COMPILER SETTINGS ---
+# src/Makefile - Kernel Modules
 CXX      := g++
-CXXFLAGS := -O3 -mavx512f -march=native -fopenmp
-LDFLAGS  := -fopenmp
+CXXFLAGS := -O3 -mavx512f -march=native -fopenmp -std=c++17
 
-# --- TARGETS ---
-TARGET   := master_scan
+all: master_scan hyperflow_engine manifold_mapper
 
-# --- INDIVIDUAL BUILD RULES ---
-
-# 1. Symmetry Module (main.cpp)
-symmetry: main.cpp
+master_scan: main.cpp
 	$(CXX) $(CXXFLAGS) main.cpp -o master_scan
-	@echo ">> SYMMETRY CORE COMPILED"
 
-# 2. Hyperflow Module (hyperflow.cpp)
-hyperflow: hyperflow.cpp
-	$(CXX) $(CXXFLAGS) -c hyperflow.cpp -o master_scan
-	@echo ">> HYPERFLOW ENGINE COMPILED"
+hyperflow_engine: hyperflow.cpp
+	$(CXX) $(CXXFLAGS) hyperflow.cpp -o hyperflow_engine
 
-# 3. Manifold Module (versal_mapper.cpp)
-manifold: versal_mapper.cpp
-	$(CXX) $(CXXFLAGS) -c versal_mapper.cpp -o master_scan
-	@echo ">> MANIFOLD MAPPER COMPILED"
+manifold_mapper: versal_mapper.cpp
+	$(CXX) $(CXXFLAGS) versal_mapper.cpp -o manifold_mapper
 
-
-# --- UTILITIES ---
-
-# Cleanup targets and objects
 clean:
-	rm -f $(TARGET)
-	@echo "--- CLEAN COMPLETE ---"
-
-.PHONY: symmetry hyperflow manifold run clean
+	rm -f master_scan hyperflow_engine manifold_mapper
