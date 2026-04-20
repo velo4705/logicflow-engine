@@ -191,6 +191,8 @@ lean Basic.lean
 ├── lean-toolchain
 ├── LICENSE.md
 ├── Makefile
+├── media
+│   └── rsa-scanning.mp4
 ├── paper
 │   ├── pvsnp.pdf
 │   └── pvsnp.tex
@@ -218,4 +220,4 @@ lean Basic.lean
 
 **SHA-256 Video Checksum**: ba5ffa9b060c7f4e5f3dbca582875443d41e0fb6dda1e1d241e959b7252ce2eb
 
-**SHA-256 ZIP Checksum**: b6402a8421936c3c5f30e4a9e1cdb689d1996c8b9c05550699d598fc81a75dac
+**SHA-256 ZIP Checksum**: 37a4fed7fcd25d2d8531d17db17afad4926c4a5d0ee1bb425869bc49bc243f9f
