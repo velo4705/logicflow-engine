@@ -6,7 +6,7 @@
 
 **LEAN 4 VERIFICATION SCRIPT**:
 
- [![Lean Verification](https://img.shields.io/badge/Lean_4-Verified-blue)](https://github.com/velo4705/logicflow-engine/Basic.lean)
+ [![Lean Verification](https://img.shields.io/badge/Lean_4-Verified-blue)](https://github.com/velo4705/logicflow-engine/blob/master/Basic.lean)
 
 
 ### For Red Teamers Only
