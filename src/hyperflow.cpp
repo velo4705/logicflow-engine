@@ -51,12 +51,12 @@ int main(int argc, char* argv[]) {
 
     // COMMAND LINE INGRESS: 
     // Supports dynamic N-scaling to benchmark complexity invariance.
-    uint64_t N = (argc > 1) ? std::stoull(argv[1]) : 143; 
+    uint64_t N = (argc > 1) ? std::stoull(argv[1]) : 32; 
     
     // TILED MODE: Increases the working set size to saturate L3 cache 
     // and verify the memory-bandwidth ceiling.
     bool tiled = (argc > 2 && std::string(argv[2]) == "--tiled");
-    const uint64_t m = 500000000; 
+    const uint64_t m = 536870912; 
 
     // SCALING LOGIC:
     // SGF REVIEW: The depth mapping simulates the 12D manifold folding 

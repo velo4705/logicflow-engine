@@ -79,8 +79,8 @@ int main() {
     // System Configuration
 
     const uint64_t n = 1024; // State Complexity (2^N Hypercube)
-    const uint64_t m = 1000; // Manifold Fold Iterations (Convergence Depth)
-    const int seeds_per_sector = 10000000; // Statistical baseline for O(1) verification.
+    const uint64_t m = 128; // Manifold Fold Iterations (Convergence Depth)
+    const int seeds_per_sector = 134217728; // Statistical baseline for O(1) verification.
     
     // Alignment at 64-byte boundary to prevent cache-line splits, 
     // ensuring optimal AVX-512 load/store throughput.
