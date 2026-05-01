@@ -1,8 +1,8 @@
 # src/Makefile - Kernel Modules
 CXX      := g++
-CXXFLAGS := -O3 -mavx512f -march=native -fopenmp -std=c++17
+CXXFLAGS := -O3 -march=x86-64-v4 -std=c++17 -ffast-math -fopenmp -flto -fuse-linker-plugin -mprefer-vector-width=512 -funroll-loops -DNDEBUG -fno-plt -fprefetch-loop-arrays -fno-exceptions -fno-rtti -fomit-frame-pointer -falign-functions=64
 
-all: master_scan hyperflow_engine manifold_mapper
+all: master_scan hyperflow_engine manifold_mapper hyperflow_magnitude
 
 master_scan: main.cpp
 	$(CXX) $(CXXFLAGS) main.cpp -o master_scan
@@ -10,8 +10,11 @@ master_scan: main.cpp
 hyperflow_engine: hyperflow.cpp
 	$(CXX) $(CXXFLAGS) hyperflow.cpp -o hyperflow_engine
 
+hyperflow_magnitude: hyperflow_mag.cpp
+	$(CXX) $(CXXFLAGS) hyperflow_mag.cpp -o hyperflow_magnitude
+
 manifold_mapper: versal_mapper.cpp
 	$(CXX) $(CXXFLAGS) versal_mapper.cpp -o manifold_mapper
 
 clean:
-	rm -f master_scan hyperflow_engine manifold_mapper
+	rm -f master_scan hyperflow_engine manifold_mapper hyperflow_magnitude

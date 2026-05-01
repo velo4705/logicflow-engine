@@ -1,7 +1,7 @@
 # Root Makefile - Logic-Flow Engine
 CXX      = g++
 # Explicitly defining flags for all targets
-CXXFLAGS = -O3 -mavx512f -march=native -std=c++17 -fopenmp
+CXXFLAGS = -O3 -march=x86-64-v4 -std=c++17 -ffast-math -fopenmp -flto -fuse-linker-plugin -mprefer-vector-width=512 -funroll-loops -DNDEBUG -fno-plt -fprefetch-loop-arrays -fno-exceptions -fno-rtti -fomit-frame-pointer -falign-functions=64
 TARGETS  = red_verify red_main red_hyperflow
 
 all: build_src $(TARGETS)

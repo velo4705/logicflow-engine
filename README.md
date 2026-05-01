@@ -155,8 +155,11 @@ make clean
 ### Manual Compilation (Hardware-Targeted)
 If you prefer direct compilation, ensure you target the hardware-specific vector registers:
 
+#### Infrastructure Note for Borg SREs:
+To further minimize TLB pressure during the 128-core injection, the linker flag `-Wl,-z,max-page-size=0x200000` is recommended, provided the target nodes have Transparent Huge Pages enabled.
+
 ```bash
-g++ -O3 -mavx512f -march=native -std=c++17 -fopenmp <filename>.cpp -o <output_name>
+g++ -O3 -march=x86-64-v4 -std=c++17 -ffast-math -fopenmp -flto -fuse-linker-plugin -mprefer-vector-width=512 -funroll-loops -DNDEBUG -fno-plt -fprefetch-loop-arrays -fno-exceptions -fno-rtti -fomit-frame-pointer -falign-functions=64 <filename>.cpp -o <output_name>
 ```
 ---
 
