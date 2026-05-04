@@ -1,6 +1,6 @@
 # src/Makefile - Kernel Modules
 CXX      := g++
-CXXFLAGS := -O3 -march=x86-64-v4 -std=c++17 -ffast-math -fopenmp -flto -fuse-linker-plugin -mprefer-vector-width=512 -funroll-loops -DNDEBUG -fno-plt -fprefetch-loop-arrays -fno-exceptions -fno-rtti -fomit-frame-pointer -falign-functions=64
+CXXFLAGS := -O3 -march=x86-64-v4 -std=c++17 -fno-math-errno -fno-trapping-math -fno-signed-zeros -fopenmp -flto -fuse-linker-plugin -mprefer-vector-width=512 -fmove-loop-invariants -DNDEBUG -fprefetch-loop-arrays -fno-omit-frame-pointer -falign-functions=64 -falign-loops=32 -Wl,-O1,--sort-common,--as-needed
 
 all: master_scan hyperflow_engine manifold_mapper hyperflow_magnitude
 
