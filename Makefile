@@ -6,6 +6,11 @@ TARGETS  = red_verify red_main red_hyperflow
 
 all: build_src $(TARGETS)
 
+flush:
+	@echo "Syncing buffers and dropping kernel caches (PageCache, dentries, inodes)..."
+	sudo sync; echo 3 | sudo tee /proc/sys/vm/drop_caches
+	@echo "Cache cleared. Recommended: Wait 3 Minutes for thermal stabilization before next run."
+
 # Triggers the src directory Makefile
 build_src:
 	$(MAKE) -C src

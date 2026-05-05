@@ -18,3 +18,8 @@ manifold_mapper: versal_mapper.cpp
 
 clean:
 	rm -f master_scan hyperflow_engine manifold_mapper hyperflow_magnitude
+
+flush:
+	@echo "Syncing buffers and dropping kernel caches (PageCache, dentries, inodes)..."
+	sudo sync; echo 3 | sudo tee /proc/sys/vm/drop_caches
+	@echo "Cache cleared. Recommended: Wait 3 Minutes for thermal stabilization before next run."
