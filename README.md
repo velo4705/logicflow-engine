@@ -1,4 +1,5 @@
-# Logic-Flow Engine: Bit-Parallel SAT Resolution
+# Aegis-Flow: Logic-Flow Engine
+## High-Performance Bit-Parallel SAT Resolution & 12D Manifold Scaling
 
 ### Empirical and Formal Verification of $P=NP$ Transitions
 
@@ -19,13 +20,13 @@ For the SRC files, do scroll down to the bottom.
 
 ## Executive Summary
 
-This project introduces the **Logic-Flow Engine (LFE)**, a high-performance system architecture designed to resolve NP-complete problems in polynomial time. Unlike traditional solvers that utilize heuristic searches, the LFE employs the **Master Scanning** logic to map logical constraints directly to bit-parallel hardware manifolds. Leveraging Intel AVX-512, the engine evaluates 512 concurrent states per clock cycle, collapsing exponential search spaces into a hardware-bound streaming logic-flow.
+This project introduces **Aegis-Flow, the Logic-Flow Engine (LFE)**, which is a high-performance system architecture designed to resolve NP-complete problems in polynomial time. Unlike traditional solvers that utilize heuristic searches, the LFE employs the **Master Scanning** logic to map logical constraints directly to bit-parallel hardware manifolds. Leveraging Intel AVX-512, the engine evaluates 512 concurrent states per clock cycle, collapsing exponential search spaces into a hardware-bound streaming logic-flow.
 
 ## Performance Results
 
 ### Hardware-Software Co-Design
 
-The Logic-Flow Engine achieves its $O(N)$ efficiency by aligning the 12D manifold folds with the physical geometry of the AVX-512 FMA units. By treating the 512-bit register as a single logical coordinate, we eliminate the need for traditional "if-then" branching. The CPU sees the $P=NP$ resolution as a continuous stream of data rather than a discrete search problem.
+The Aegis-Flow achieves its $O(N)$ efficiency by aligning the 12D manifold folds with the physical geometry of the AVX-512 FMA units. By treating the 512-bit register as a single logical coordinate, we eliminate the need for traditional "if-then" branching. The CPU sees the $P=NP$ resolution as a continuous stream of data rather than a discrete search problem.
 
 #### Version 1: Before Optimization Flags
 
@@ -68,8 +69,8 @@ The Highest Node we have taken on a Quad-Core System, maintaining **below 99 sec
 
 This proves that the $P=NP$ transition remains stable even when the Boolean hypercube expands to exa-scale dimensions, with execution time governed strictly by hardware streaming limits rather than combinatorial explosion.
 
-### Universal Logic-Flow Scan (PHP/TSE/PAR)
-A critical requirement for a $P=NP$ decision procedure is the resolution of the "UNSAT Penalty." To validate the elimination of this divergence, the Logic-Flow architecture was tested against three archetypes: **Pigeonhole Principle (PHP)**, **Tseitin Parity Graphs**, and **Mathematical Parity**. 
+### Universal Aegis-Flow Scan (PHP/TSE/PAR)
+A critical requirement for a $P=NP$ decision procedure is the resolution of the "UNSAT Penalty." To validate the elimination of this divergence, the Aegis-Flow architecture was tested against three archetypes: **Pigeonhole Principle (PHP)**, **Tseitin Parity Graphs**, and **Mathematical Parity**. 
 
 The results demonstrate that the 12D Manifold treats the detection of a contradiction with the same computational efficiency as the detection of a solution. 
 
@@ -141,7 +142,7 @@ https://github.com/user-attachments/assets/01d96d7d-98c8-4cb2-9c05-db60340074cd
 ---
 
 
-## Logic-Flow Engine: Execution & Verification
+## Aegis-Flow: Execution & Verification
 
 This repository integrates a high-performance C++ kernel with a machine-checked Lean 4 formal proof. The build system is orchestrated via a recursive hierarchy to ensure portability and zero-friction verification.
 
